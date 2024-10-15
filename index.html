@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Background and Move GIF</title>
+  <style>
+    /* Basic styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+
+    /* Background image container */
+    .background-container {
+      position: relative;
+      width: 50%; /* Adjust size of the background container */
+      max-width: 800px;
+      height: 600px; /* Adjust the height */
+      background-image: url('rabbit1.png');
+      background-size: cover; /* Cover the container */
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    /* Text styling */
+    .intro-text {
+      position: absolute;
+      bottom: 250px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      z-index: 2; /* Make sure text is in front */
+      text-shadow: 
+        1px 1px 0 black,
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black;
+    }
+
+    /* Image styling */
+    .popup-image {
+      position: absolute; /* Absolute positioning inside the background container */
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      cursor: pointer;
+      display: none; /* Hide images initially */
+      z-index: 3; /* Ensure images are in front of the background */
+    }
+
+    /* GIF styling */
+    #myGif {
+      position: absolute;
+      bottom: 20px;
+      left: 10px; /* Start 10px from the left edge */
+      width: 100px;
+      display: none; /* Hide the GIF initially */
+      z-index: 3; /* Make sure the GIF is in front */
+    }
+
+    /* Rabbit2 image styling */
+    #rabbit2Image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none; /* Hide rabbit2 initially */
+      object-fit: cover; /* Ensure rabbit2.png covers the container size */
+      z-index: 3; /* Ensure it's above the background */
+    }
+
+    /* Popup styling */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      display: none; /* Initially hide the popup */
+      z-index: 10;
+    }
+
+    /* Restart button styling */
+    #restartButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: white; /* Change to white */
+      color: black; /* Black text color */
+      border: 2px solid black;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none; /* Hide the button initially */
+      z-index: 11; /* Ensure it is above all other elements */
+    }
+
+    #restartButton:hover {
+      background-color: #f0f0f0; /* Slightly darker white when hovered */
+    }
+  </style>
+</head>
+<body>
+
+<!-- Introductory text -->
+<p id="introText" class="intro-text">달에 가고싶어. 도와줄래?</p>
+
+<!-- Background container that holds the background and GIF -->
+<div class="background-container">
+  <!-- First Image to change the background -->
+  <img id="myImage1" class="popup-image" src="okay1.png" alt="Click me to change background">
+
+  <!-- Second Image to change the background -->
+  <img id="myImage2" class="popup-image" src="okay2.png" alt="Click me to change background">
+
+  <!-- Moving GIF -->
+  <img id="myGif" src="rabbit.gif" alt="Moving GIF">
+
+  <!-- Rabbit2 image -->
+  <img id="rabbit2Image" src="rabbit2.png" alt="Rabbit2 Image">
+</div>
+
+<!-- Popup that appears when GIF reaches the center -->
+<div id="popup" class="popup">
+  달 조각을 발견했다!
+</div>
+
+<!-- Restart Button -->
+<button id="restartButton">Restart</button>
+
+<script>
+  // Function to hide both images
+  function hideImages() {
+    document.getElementById("myImage1").style.display = "none";
+    document.getElementById("myImage2").style.display = "none";
+  }
+
+  // Show images and hide text after 3 seconds
+  setTimeout(function() {
+    document.getElementById("introText").style.display = "none"; // Hide the text
+    document.getElementById("myImage1").style.display = "block"; // Show the first image
+    document.getElementById("myImage2").style.display = "block"; // Show the second image
+  }, 3000); // 3000 milliseconds = 3 seconds
+
+  // Get the images and GIF
+  var img1 = document.getElementById("myImage1");
+  var img2 = document.getElementById("myImage2");
+  var gif = document.getElementById("myGif");
+  var rabbit2Image = document.getElementById("rabbit2Image");
+  var popup = document.getElementById("popup");
+  var restartButton = document.getElementById("restartButton");
+  var backgroundContainer = document.querySelector(".background-container");
+
+  // When the first image is clicked, change the background image and hide both images
+  img1.onclick = function() {
+    backgroundContainer.style.backgroundImage = "url('rabbit3.png')"; // Set a new background image
+    hideImages(); // Hide both images
+    gif.style.display = "block"; // Show the GIF
+    gif.style.left = '10px'; // Start the GIF 10px from the left edge
+  }
+
+  // When the second image is clicked, change the background image and hide both images
+  img2.onclick = function() {
+    backgroundContainer.style.backgroundImage = "url('rabbit3.png')"; // Set a different background image
+    hideImages(); // Hide both images
+    gif.style.display = "block"; // Show the GIF
+    gif.style.left = '10px'; // Start the GIF 10px from the left edge
+  }
+
+  // Move the GIF to the right when the right arrow key is pressed
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "ArrowRight") {
+      let currentLeft = parseInt(window.getComputedStyle(gif).getPropertyValue('left'));
+      let containerWidth = backgroundContainer.offsetWidth;
+      let gifWidth = gif.offsetWidth;
+
+      // Calculate new position
+      let newLeft = currentLeft + 20;
+
+      // Check if the GIF has reached the right edge of the container
+      if (newLeft + gifWidth <= containerWidth) {
+        gif.style.left = newLeft + 'px'; // Move the GIF 20px to the right
+      } else {
+        gif.style.display = 'none'; // Hide the GIF if it reaches the right edge
+        popup.style.display = 'none'; // Hide the popup when rabbit2 appears
+        rabbit2Image.style.display = 'block'; // Show the rabbit2 image
+        restartButton.style.display = 'block'; // Show the restart button
+      }
+
+      // Get the center of the background container
+      var containerCenter = containerWidth / 2;
+
+      // Get the current left position of the GIF relative to the container
+      var gifLeftPosition = gif.offsetLeft + gif.offsetWidth / 2;
+
+      // Check if the GIF has reached the center of the background
+      if (gifLeftPosition >= containerCenter && !popup.style.display) {
+        popup.style.display = 'block'; // Show the popup
+      }
+    }
+  });
+
+  // Restart button functionality
+  restartButton.onclick = function() {
+    location.reload(); // Reload the page to restart
+  }
+</script>
+
+</body>
+</html>
